@@ -1,0 +1,22 @@
+server:
+  port: 8888
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: nacos-consumer
+          uri: lb://nacos-consumer
+          predicates:
+            - Path=/consumer/**
+          filters:
+            - RewritePath=/consumer/(?<segment>.*),/$\{segment}
+        - id: nacos-provider
+          uri: lb://nacos-provide
+          predicates:
+            - Path=/provide/**
+          filters:
+            - RewritePath=/provide/(?<segment>.*),/$\{segment}
+
